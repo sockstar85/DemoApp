@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<navigation:BasePage
+    x:Class="DemoApp.Pages.NextPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:navigation="clr-namespace:CoreM.Navigation;assembly=CoreM"
+    xmlns:pages="clr-namespace:DemoApp.Pages"
+    x:DataType="pages:NextPageViewModel">
+    <VerticalStackLayout>
+        <Label
+            HorizontalOptions="Center"
+            Text="Welcome to the next page!"
+            VerticalOptions="Center" />
+    </VerticalStackLayout>
+</navigation:BasePage>
