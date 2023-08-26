@@ -3,6 +3,9 @@ using CoreM.Navigation;
 
 namespace DemoApp.Pages;
 
+/// <summary>
+///     The main page.
+/// </summary>
 public partial class MainPage
 {
     #region Methods
@@ -23,6 +26,12 @@ public partial class MainPage
     /// <summary>
     ///     Called when appearing.
     /// </summary>
+    /// <remarks>
+    ///     NOTE: This is here because normally navigation occurs
+    ///     through <see cref="IExtendedNavigationService"/> which
+    ///     would call <see cref="NavigatableViewModel"/> lifecycle
+    ///     events. This page got set in <c>App.xaml.cs</c>.
+    /// </remarks>
     protected override void OnAppearing()
     {
         base.OnAppearing();

@@ -3,11 +3,12 @@ using CoreM.Logging;
 using CoreM.Managers;
 using CoreM.Navigation;
 using CoreM.Services;
+using DemoApp.Localization;
 
 namespace DemoApp.Pages
 {
     /// <summary>
-    ///     The base view model for pages.
+    ///     The base view model for pages within the app.
     /// </summary>
     public class BasePageViewModel : NavigatableViewModel
     {
@@ -22,25 +23,59 @@ namespace DemoApp.Pages
         /// <param name="dialogService">The dialog service.</param>
         /// <param name="connectivityManager">The connectivity manager.</param>
         /// <param name="logger">The logger.</param>
-        /// <param name="resourceManager">The resource manager.</param>
         public BasePageViewModel(
             IExtendedNavigationService navigation,
             IDialogService dialogService,
             IConnectivityManager connectivityManager,
-            IExtendedLogger logger,
-            ILocalizationService resourceManager)
-            : base(navigation, dialogService, connectivityManager, logger, resourceManager)
+            IExtendedLogger logger)
+            : base(navigation, dialogService, connectivityManager, logger)
         {
         }
 
         #endregion
 
         /// <summary>
+        ///     Initializes this instance before page is placed on the navigation stack allowing for asynchronous functionality.
+        ///     By default, it refreshes the network connection status.
+        /// </summary>
+        public override async Task InitializeAsync(INavigationParameters parameters, int lineNumber = 0,
+            string methodName = "",
+            string filePath = "")
+        {
+            await base.InitializeAsync(parameters, lineNumber, methodName, filePath);
+
+            Console.WriteLine($"{filePath}\n{nameof(InitializeAsync)}() hit");
+        }
+
+        /// <summary>
+        ///     Called when a page is navigated away from.
+        /// </summary>
+        public override async Task OnNavigatedFromAsync(INavigationParameters parameters, int lineNumber = 0,
+            string methodName = "",
+            string filePath = "")
+        {
+            await base.OnNavigatedFromAsync(parameters, lineNumber, methodName, filePath);
+
+            Console.WriteLine($"{filePath}\n{nameof(OnNavigatedFromAsync)}() hit");
+        }
+
+        /// <summary>
+        ///     Called when a page is navigated to just after being placed on the navigation stack.
+        /// </summary>
+        public override async Task OnNavigatedToAsync(INavigationParameters parameters, int lineNumber = 0,
+            string methodName = "",
+            string filePath = "")
+        {
+            await base.OnNavigatedToAsync(parameters, lineNumber, methodName, filePath);
+
+            Console.WriteLine($"{filePath}\n{nameof(OnNavigatedToAsync)}() hit");
+        }
+
+        /// <summary>
         ///     Handles the failed navigation with a popup to alert the user.
         /// </summary>
         /// <param name="ex">The exception thrown during navigation.</param>
-        /// <param name="logToAppCenter">Flag indicating whether to log error to AppCenter.</param>
-        protected override async Task HandleFailedNavigationAsync(Exception ex, bool logToAppCenter = true)
+        protected override async Task HandleFailedNavigationAsync(Exception? ex, bool logToAppCenter = true)
         {
             if (ex is NoNetworkException)
             {
@@ -48,9 +83,13 @@ namespace DemoApp.Pages
                 return;
             }
 
-            Logger.Log(ex, logToAppCenter);
+            //errors on navigation already get logged
 
-            await DialogService.DisplayAlertAsync("Error", "An error occurred", "Ok", exception: ex);
+            await DialogService.DisplayAlertAsync(
+                ErrorResource.GenericErrorTitle,
+                ErrorResource.GenericErrorDescription,
+                AppResource.Ok,
+                exception: ex);
         }
 
         /// <summary>
@@ -58,7 +97,10 @@ namespace DemoApp.Pages
         /// </summary>
         protected override async Task HandleNoNetworkConnectionAsync()
         {
-            await DialogService.DisplayAlertAsync("No network connection", "Unable to perform action", "Ok");
+            await DialogService.DisplayAlertAsync(
+                ErrorResource.NoNetworkTitle,
+                ErrorResource.NoNetworkDescription,
+                AppResource.Ok);
         }
 
         #endregion

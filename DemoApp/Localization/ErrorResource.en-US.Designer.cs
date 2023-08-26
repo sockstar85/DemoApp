@@ -61,11 +61,38 @@ namespace DemoApp.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Test error.
+        ///   Looks up a localized string similar to An error occurred.
         /// </summary>
-        internal static string TestError {
+        internal static string GenericErrorDescription {
             get {
-                return ResourceManager.GetString("TestError", resourceCulture);
+                return ResourceManager.GetString("GenericErrorDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error.
+        /// </summary>
+        internal static string GenericErrorTitle {
+            get {
+                return ResourceManager.GetString("GenericErrorTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to perform action offline.
+        /// </summary>
+        internal static string NoNetworkDescription {
+            get {
+                return ResourceManager.GetString("NoNetworkDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No network connection.
+        /// </summary>
+        internal static string NoNetworkTitle {
+            get {
+                return ResourceManager.GetString("NoNetworkTitle", resourceCulture);
             }
         }
     }

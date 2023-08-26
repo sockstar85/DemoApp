@@ -61,11 +61,58 @@ namespace DemoApp.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Do you really want to go back? 
+        ///(Not working in iOS
+        ///https://github.com/dotnet/maui/issues/8296).
+        /// </summary>
+        internal static string BackButtonConfirmationDescription {
+            get {
+                return ResourceManager.GetString("BackButtonConfirmationDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure?.
+        /// </summary>
+        internal static string BackButtonConfirmationTitle {
+            get {
+                return ResourceManager.GetString("BackButtonConfirmationTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Next page.
         /// </summary>
         internal static string GoToNextPage {
             get {
                 return ResourceManager.GetString("GoToNextPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Next page - error.
+        /// </summary>
+        internal static string GoToNextPageWithError {
+            get {
+                return ResourceManager.GetString("GoToNextPageWithError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No.
+        /// </summary>
+        internal static string No {
+            get {
+                return ResourceManager.GetString("No", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ok.
+        /// </summary>
+        internal static string Ok {
+            get {
+                return ResourceManager.GetString("Ok", resourceCulture);
             }
         }
         
@@ -84,6 +131,26 @@ namespace DemoApp.Localization {
         internal static string TestButtonText {
             get {
                 return ResourceManager.GetString("TestButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yes.
+        /// </summary>
+        internal static string Yes {
+            get {
+                return ResourceManager.GetString("Yes", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Do you want to close the application?.
+        /// </summary>
+        internal static string CloseAppConfirmation
+        {
+            get
+            {
+                return ResourceManager.GetString("CloseAppConfirmation", resourceCulture);
             }
         }
     }

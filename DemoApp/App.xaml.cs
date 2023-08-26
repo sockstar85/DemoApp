@@ -2,6 +2,9 @@
 
 namespace DemoApp;
 
+/// <summary>
+///     The application.
+/// </summary>
 public partial class App
 {
     #region Methods
@@ -14,7 +17,6 @@ public partial class App
     public App()
     {
         InitializeComponent();
-
         MainPage = new NavigationPage(new MainPage());
     }
 

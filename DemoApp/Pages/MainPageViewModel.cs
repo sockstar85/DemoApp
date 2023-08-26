@@ -4,15 +4,19 @@ using CoreM.Logging;
 using CoreM.Managers;
 using CoreM.Navigation;
 using CoreM.Services;
+using DemoApp.Localization;
 
 namespace DemoApp.Pages
 {
+    /// <summary>
+    ///     The view model for <see cref="MainPage" />.
+    /// </summary>
     public class MainPageViewModel : BasePageViewModel
     {
         #region Fields
 
         private int _count;
-        private string _counterBtnText;
+        private string? _counterBtnText;
 
         #endregion
 
@@ -26,7 +30,7 @@ namespace DemoApp.Pages
         /// <summary>
         ///     Gets/sets counter button text.
         /// </summary>
-        public string CounterButtonText
+        public string? CounterButtonText
         {
             get => _counterBtnText;
             set => SetProperty(ref _counterBtnText, value);
@@ -37,15 +41,10 @@ namespace DemoApp.Pages
         /// </summary>
         public IAsyncRelayCommand NextPageCommand => new AsyncRelayCommand(NavigateToNextPageAsync);
 
-        private async Task NavigateToNextPageAsync()
-        {
-            var navResult = await Navigation.PushAsync(typeof(NextPage));
-
-            if (!navResult.Success)
-            {
-                await HandleFailedNavigationAsync(navResult.Exception);
-            }
-        }
+        /// <summary>
+        ///     Gets the next page with error command.
+        /// </summary>
+        public IAsyncRelayCommand NextPageErrorCommand => new AsyncRelayCommand(NavigateToNextPageWithErrorAsync);
 
         #endregion
 
@@ -60,18 +59,32 @@ namespace DemoApp.Pages
         /// <param name="dialogService">The dialog service.</param>
         /// <param name="connectivityManager">The connectivity manager.</param>
         /// <param name="logger">The logger.</param>
-        /// <param name="localizationService">The resource manager.</param>
         public MainPageViewModel(
             IExtendedNavigationService navigation,
             IDialogService dialogService,
             IConnectivityManager connectivityManager,
-            IExtendedLogger logger,
-            ILocalizationService localizationService) : base(navigation, dialogService, connectivityManager, logger,
-            localizationService)
+            IExtendedLogger logger) : base(navigation, dialogService, connectivityManager, logger)
         {
         }
 
         #endregion
+
+        /// <summary>
+        ///     Quits the application after confirmation.
+        /// </summary>
+        public override async Task HandleBackButtonOverrideAsync()
+        {
+            var confirmQuit = await DialogService.DisplayAlertAsync(
+                AppResource.BackButtonConfirmationTitle,
+                AppResource.CloseAppConfirmation,
+                AppResource.Yes,
+                AppResource.No);
+
+            if (confirmQuit)
+            {
+                Application.Current?.Quit();
+            }
+        }
 
         /// <summary>
         ///     Called when a page is navigated to just after being placed on the navigation stack.
@@ -84,7 +97,7 @@ namespace DemoApp.Pages
         {
             await base.OnNavigatedToAsync(parameters, lineNumber, methodName, filePath);
 
-            CounterButtonText = ResourceManager.GetString("TestButtonText");
+            CounterButtonText = AppResource.TestButtonText;
         }
 
         /// <summary>
@@ -99,6 +112,51 @@ namespace DemoApp.Pages
                 : $"Clicked {_count} times";
 
             SemanticScreenReader.Announce(CounterButtonText);
+        }
+
+        /// <summary>
+        ///     Navigates to next page asynchronous.
+        /// </summary>
+        private async Task NavigateToNextPageAsync()
+        {
+            //In NextPageViewModel.InitializeAsync() we enforce
+            //NavParamKey.RequiredDemoNavParam being passed in
+            //so we'll send it along so it doesn't throw an exception.
+            var navParams = new NavigationParameters
+            {
+                { NavParamKeys.RequiredDemoNavParam, true }
+            };
+
+            var navResult = await Navigation.PushAsync(typeof(NextPage), navParams);
+
+            if (!navResult.Success)
+            {
+                await HandleFailedNavigationAsync(navResult.Exception);
+            }
+        }
+
+        /// <summary>
+        ///     Navigates to next page with error asynchronous.
+        /// </summary>
+        private async Task NavigateToNextPageWithErrorAsync()
+        {
+            //In NextPageViewModel.InitializeAsync() we enforce
+            //NavParamKey.RequiredDemoNavParam being passed in
+            //so we'll send it along so it doesn't throw an exception.
+            //We'll also send another parameter that can be used in
+            //the next page's view model's lifecycle events.
+            var navParameters = new NavigationParameters
+            {
+                { NavParamKeys.ThrowError, true },
+                { NavParamKeys.RequiredDemoNavParam, true }
+            };
+
+            var navResult = await Navigation.PushAsync(typeof(NextPage), navParameters);
+
+            if (!navResult.Success)
+            {
+                await HandleFailedNavigationAsync(navResult.Exception);
+            }
         }
 
         #endregion

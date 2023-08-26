@@ -1,10 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 
-<ContentPage
+<navigation:BasePage
     x:Class="DemoApp.Pages.MainPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:localization="using:DemoApp.Localization"
+    xmlns:navigation="clr-namespace:CoreM.Navigation;assembly=CoreM"
     xmlns:pages="using:DemoApp.Pages"
     x:DataType="pages:MainPageViewModel">
 
@@ -42,9 +43,14 @@
             <Button
                 Command="{Binding NextPageCommand}"
                 HorizontalOptions="Center"
-                Text="{localization:Translate GoToNextPage}" />
+                Text="{x:Static localization:AppResource.GoToNextPage}" />
+
+            <Button
+                Command="{Binding NextPageErrorCommand}"
+                HorizontalOptions="Center"
+                Text="{x:Static localization:AppResource.GoToNextPageWithError}" />
 
         </VerticalStackLayout>
     </ScrollView>
 
-</ContentPage>
+</navigation:BasePage>

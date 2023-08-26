@@ -1,45 +1,81 @@
-﻿using System.Resources;
+﻿using System.Reflection;
+using System.Resources;
 using CommunityToolkit.Maui;
 using CoreM.Startup;
-using DemoApp.Localization;
 using DemoApp.Pages;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Linq;
 using Visuals.Startup;
 
 namespace DemoApp;
 
+/// <summary>
+///     The entry point for the Maui Application.
+/// </summary>
 public static class MauiProgram
 {
     #region Methods
 
+    /// <summary>
+    ///     Creates the maui application.
+    /// </summary>
     public static MauiApp CreateMauiApp()
     {
         var builder = MauiApp.CreateBuilder();
 
-       RegisterRequiredTypes(
-            builder.UseMauiApp<App>()
-                .UseMauiCommunityToolkit()
-                .VisualsInit()
-                .RegisterViews()
-                .RegisterViewModels()
-                .ConfigureFonts(fonts =>
-                {
-                    fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-                    fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-                }));
+        builder.UseMauiApp<App>()
+            .UseMauiCommunityToolkit()
+            .VisualsInit()
+            .RegisterViews()
+            .RegisterViewModels()
+            .RegisterRequiredTypes()
+            .ConfigureFonts(fonts =>
+            {
+                fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+                fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+            });
 
+        return BuildApp(builder);
+    }
+
+    /// <summary>
+    ///     Builds the application using <see cref="CoreAppBuilder" />.
+    /// </summary>
+    /// <param name="mauiAppBuilder">The maui app builder.</param>
+    private static MauiApp BuildApp(MauiAppBuilder mauiAppBuilder)
+    {
 #if DEBUG
-        builder.Logging.AddDebug();
+        mauiAppBuilder.Logging.AddDebug();
+        const bool debugEnabled = true;
+#else
+        const bool debugEnabled = false;
 #endif
-        var stringResources = new List<ResourceManager>
-        {
-            AppResource.ResourceManager,
-            ErrorResource.ResourceManager
-        };
 
-        var app = CoreAppBuilder.Build(builder, stringResources);
+        /*Using Core builder initializes any dependencies
+         *that require services to be finalized prior to
+         *to initialization.
+         */
 
-        return app;
+        return CoreAppBuilder.Build(
+            mauiAppBuilder,
+            GetConfigJson(),
+            debugEnabled);
+    }
+
+    /// <summary>
+    ///     Gets the configuration json.
+    /// </summary>
+    private static JObject GetConfigJson()
+    {
+        const string configFileLocation = $"{nameof(DemoApp)}.{nameof(Config)}.appSettings.json";
+
+        var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(configFileLocation)
+                     ?? throw new MissingManifestResourceException($"Unable to locate {configFileLocation}");
+
+        using var reader = new StreamReader(stream);
+        var json = reader.ReadToEnd();
+
+        return JObject.Parse(json);
     }
 
     /// <summary>

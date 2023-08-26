@@ -117,13 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="GoToNextPage" xml:space="preserve">
-    <value>Next page</value>
+  <data name="GenericErrorDescription" xml:space="preserve">
+    <value>An error occurred</value>
   </data>
-  <data name="Test" xml:space="preserve">
-    <value>Test</value>
+  <data name="GenericErrorTitle" xml:space="preserve">
+    <value>Error</value>
   </data>
-  <data name="TestButtonText" xml:space="preserve">
-    <value>Hit me!</value>
+  <data name="NoNetworkDescription" xml:space="preserve">
+    <value>Unable to perform action offline</value>
+  </data>
+  <data name="NoNetworkTitle" xml:space="preserve">
+    <value>No network connection</value>
   </data>
 </root>
