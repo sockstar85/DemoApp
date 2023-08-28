@@ -67,7 +67,7 @@ public static class MauiProgram
     /// </summary>
     private static JObject GetConfigJson()
     {
-        const string configFileLocation = $"{nameof(DemoApp)}.{nameof(Config)}.appSettings.json";
+        const string configFileLocation = $"{nameof(DemoApp)}.Config.appSettings.json";
 
         var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(configFileLocation)
                      ?? throw new MissingManifestResourceException($"Unable to locate {configFileLocation}");
