@@ -5,7 +5,6 @@ using CoreM.Startup;
 using DemoApp.Pages;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
-using Visuals.Startup;
 
 namespace DemoApp;
 
@@ -25,7 +24,7 @@ public static class MauiProgram
 
         builder.UseMauiApp<App>()
             .UseMauiCommunityToolkit()
-            .VisualsInit()
+            //.VisualsInit() //If you wanted to use the visuals library, initialize it here
             .RegisterViews()
             .RegisterViewModels()
             .RegisterRequiredTypes()
@@ -51,10 +50,11 @@ public static class MauiProgram
         const bool debugEnabled = false;
 #endif
 
-        /*Using Core builder initializes any dependencies
-         *that require services to be finalized prior to
-         *to initialization.
-         */
+        /* * * * * * * * * * * * * * * * * * * * * * * * * * * *
+         * Using Core App Builder initializes any dependencies
+         * that require services to be finalized prior to
+         * to initialization.
+         * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
         return CoreAppBuilder.Build(
             mauiAppBuilder,
