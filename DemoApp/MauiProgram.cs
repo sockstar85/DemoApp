@@ -25,6 +25,7 @@ public static class MauiProgram
         builder.UseMauiApp<App>()
             .UseMauiCommunityToolkit()
             //.VisualsInit() //If you wanted to use the visuals library, initialize it here
+            .CoreMInit()
             .RegisterViews()
             .RegisterViewModels()
             .RegisterRequiredTypes()
